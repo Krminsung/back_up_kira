@@ -1,0 +1,156 @@
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 15, 35, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xl);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.logoIcon {
+    font-size: 1.5rem;
+}
+
+.logoText {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.navLink {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+    text-decoration: none;
+}
+
+.navLink:hover {
+    color: var(--text-primary);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.userMenu {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.userButton {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: white;
+}
+
+.userName {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.authButtons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.logoutBtn {
+    font-size: 0.75rem;
+}
+
+.mobileToggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+}
+
+.mobileToggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+}
+
+@media (max-width: 768px) {
+    .nav {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: var(--bg-secondary);
+        flex-direction: column;
+        padding: var(--spacing-lg);
+        gap: var(--spacing-md);
+        border-bottom: 1px solid var(--border);
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+        transition: all var(--transition-normal);
+    }
+
+    .nav.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .userName {
+        display: none;
+    }
+
+    .mobileToggle {
+        display: flex;
+    }
+}

@@ -1,0 +1,70 @@
+services:
+  app: # Frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  api: # Backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql://kirakira:kirakira123@postgres:5432/kirakira
+      - FRONTEND_URL=http://kirakira.cloudkakao.store
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - HUGGING_FACE_TOKEN=${HUGGING_FACE_TOKEN}
+      - PORT=8003
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=kirakira
+      - POSTGRES_PASSWORD=kirakira123
+      - POSTGRES_DB=kirakira
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kirakira -d kirakira"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "3003:80"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - uploads_data:/uploads
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - app
+      - api
+    restart: always
+
+volumes:
+  postgres_data:
+  uploads_data:
